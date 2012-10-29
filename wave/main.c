@@ -19,12 +19,13 @@ int main(int argc, char** argv){
 	}
 	fread(&header, sizeof(header), 1, fp);
 	show_header(&header);
-
-	data = malloc(header.Subchunk2Size);
-	fread(data, header.Subchunk2Size, 1, fp);
-	fclose(fp);
 	
 	if(argc > 2){
+		data = malloc(header.Subchunk2Size);
+
+		fread(data, header.Subchunk2Size, 1, fp);
+		fclose(fp);
+
 		fp = fopen(argv[2], "wb");
 		if(!fp){
 			perror(argv[1]);
@@ -33,8 +34,9 @@ int main(int argc, char** argv){
 
 		fwrite(&header, sizeof(header), 1, fp);
 		fwrite(data, header.Subchunk2Size, 1, fp);
-		fclose(fp);
 	}
+
+	fclose(fp);
 
 	return 0;
 }
