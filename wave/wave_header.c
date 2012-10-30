@@ -22,14 +22,25 @@ void show_header(HeaderType *header){
 	printf("Subchunk2Size: %ld\n\n", header->Subchunk2Size);
 }
 
-HeaderType* decimar_header(HeaderType header, int decimacao){
-	HeaderType *ret = malloc(sizeof(HeaderType));
-	*ret = header;
+void decimar_header(HeaderType *inHeader, int decimacao, FILE* output){
+	HeaderType outHeader = *inHeader;
 	
-	ret->Subchunk2Size /= decimacao;
-	ret->ChunkSize = ret->Subchunk1Size + ret->Subchunk2Size;
-	ret->SampleRate /= decimacao;
-	ret->ByteRate = ret->SampleRate * ret->NumChannels * ret->BitsPerSample / 8;
-			
-	return ret;	
+	outHeader.Subchunk2Size /= decimacao;
+	outHeader.ChunkSize = outHeader.Subchunk1Size + outHeader.Subchunk2Size;
+	outHeader.SampleRate /= decimacao;
+	outHeader.ByteRate = outHeader.SampleRate * outHeader.NumChannels * outHeader.BitsPerSample / 8;
+
+	fwrite(&outHeader, sizeof(HeaderType), 1, output);
+}
+
+void decimar_dados(char* data, HeaderType* inHeader, int decimacao, FILE* output){
+	int i, lim;
+	
+	// quantidade de iteracoes para realizar
+	lim = inHeader->Subchunk2Size / (inHeader->BlockAlign * decimacao);
+
+	// copia amostras pulando intervalos de decimacao
+	for(i = 0; i < lim; i++){
+		fwrite(data + inHeader->BlockAlign * inHeader->NumChannels * i * decimacao / 2, inHeader->BlockAlign, 1, output);
+	}
 }

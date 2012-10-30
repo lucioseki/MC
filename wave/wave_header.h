@@ -33,6 +33,8 @@ typedef struct WaveData{
 
 void show_header(HeaderType*);
 
-HeaderType* decimar_header(HeaderType, int);
+void decimar_header(HeaderType*, int, FILE*); 
+
+void decimar_dados(char*, HeaderType*, int, FILE*);
 
 #endif
