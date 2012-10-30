@@ -1,3 +1,7 @@
+#
+# Lucio Mitsuru Seki	379883
+# 
+
 CC = gcc
 ARGS = 
 OUTPUT = main

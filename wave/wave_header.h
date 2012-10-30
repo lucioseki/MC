@@ -1,3 +1,7 @@
+/*
+ *	Lucio Mitsuru Seki	379883
+ * */
+
 #ifndef WAVE_HEADER_H
 #define WAVE_HEADER_H
 
@@ -28,4 +32,7 @@ typedef struct WaveData{
 }WaveData;
 
 void show_header(HeaderType*);
+
+HeaderType* decimar_header(HeaderType, int);
+
 #endif
